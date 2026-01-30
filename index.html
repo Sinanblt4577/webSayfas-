@@ -1,171 +1,530 @@
 <!doctype html>
 <html lang="tr">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Yazılım Kulübü</title>
-
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Yazılım Kulübü + Mini Oyun</title>
   <style>
-    body {
-      margin: 0;
+    body{
+      margin:0;
       font-family: Arial, sans-serif;
-      background: linear-gradient(120deg, #e0f2fe, #fdf4ff);
+      background:#0b1220;
+      color:#fff;
     }
-
-    header {
-      background: linear-gradient(90deg, #2563eb, #7c3aed);
-      color: white;
-      text-align: center;
-      padding: 30px 15px 15px;
+    header{
+      background: linear-gradient(90deg,#2563eb,#7c3aed);
+      text-align:center;
+      padding:28px 14px;
     }
-
-    header h1 {
-      margin: 0;
-      font-size: 32px;
+    nav{
+      background: rgba(30,41,59,0.9);
+      text-align:center;
+      padding:12px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(8px);
     }
+    nav a{ color:#fff; text-decoration:none; margin:0 12px; font-weight:bold; }
+    nav a:hover{ color:#93c5fd; }
 
-    header p {
-      margin-top: 8px;
-      font-size: 16px;
-      opacity: 0.9;
-    }
-
-    /* HEADER GÖRSELİ */
-    .hero-img {
+    .card{
       max-width: 900px;
-      margin: 20px auto 0;
-      border-radius: 20px;
-      overflow: hidden;
-      box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+      margin: 22px auto;
+      background: rgba(255,255,255,0.92);
+      color:#0f172a;
+      padding: 18px;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.25);
     }
+    .card h2{ margin-top:0; color:#4f46e5; }
 
-    .hero-img img {
-      width: 100%;
-      height: 300px;
-      object-fit: cover;
-      display: block;
+    /* Oyun alanı */
+    .game-wrap{
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      align-items: start;
     }
-
-    nav {
-      background: #1e293b;
-      text-align: center;
-      padding: 12px;
-    }
-
-    nav a {
-      color: white;
-      margin: 0 12px;
-      text-decoration: none;
+    .hud{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content: space-between;
       font-weight: bold;
     }
-
-    nav a:hover {
-      color: #93c5fd;
+    .hud .pill{
+      background:#111827;
+      color:#fff;
+      padding:8px 12px;
+      border-radius: 999px;
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
     }
-
-    .card {
-      max-width: 800px;
-      margin: 25px auto;
-      background: white;
-      padding: 20px;
-      border-radius: 16px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    .controls{
+      font-size: 14px;
+      opacity: 0.9;
     }
-
-    /* KART İÇİ GÖRSEL */
-    .card img {
+    canvas{
       width: 100%;
-      height: 200px;
-      object-fit: cover;
-      border-radius: 14px;
-      margin-bottom: 12px;
+      max-width: 900px;
+      aspect-ratio: 16 / 9;
+      background: linear-gradient(180deg, #0ea5e9, #1e293b);
+      border-radius: 16px;
+      display:block;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+      touch-action: manipulation; /* mobilde çift tıklama zoom’u azaltır */
+    }
+    .btns{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    button{
+      border:none;
+      cursor:pointer;
+      border-radius: 12px;
+      padding:10px 14px;
+      font-weight:bold;
+      background: linear-gradient(90deg,#22c55e,#16a34a);
+      color:#fff;
+      transition: transform .15s;
+    }
+    button:hover{ transform: scale(1.04); }
+    .ghost{
+      background: linear-gradient(90deg,#64748b,#475569);
     }
 
-    .card h2 {
-      color: #4f46e5;
-      margin-top: 0;
+    /* DALGA */
+    .wave-area{
+      position: relative;
+      width:100%;
+      height:160px;
+      overflow:hidden;
+      background:#0b1220;
+      margin-top: 18px;
     }
-
-    ul {
-      padding-left: 20px;
+    .wave{
+      position:absolute;
+      left:0;
+      width:200%;
+      height:100%;
+      background-repeat: repeat-x;
+      background-position: bottom;
+      opacity:0.8;
     }
-
-    ul li {
-      margin-bottom: 8px;
+    .wave1{
+      bottom:0;
+      background-image: radial-gradient(circle at 50% 120%, #38bdf8 50%, transparent 55%);
+      animation: waveMove 12s linear infinite;
     }
-
-    button {
-      background: linear-gradient(90deg, #22c55e, #16a34a);
-      color: white;
-      border: none;
-      padding: 12px 18px;
-      border-radius: 25px;
-      cursor: pointer;
-      font-size: 15px;
+    .wave2{
+      bottom:10px;
+      opacity:0.5;
+      background-image: radial-gradient(circle at 50% 120%, #60a5fa 50%, transparent 55%);
+      animation: waveMove 18s linear infinite reverse;
     }
-
-    button:hover {
-      transform: scale(1.05);
+    .wave3{
+      bottom:20px;
+      opacity:0.3;
+      background-image: radial-gradient(circle at 50% 120%, #a5b4fc 50%, transparent 55%);
+      animation: waveMove 25s linear infinite;
     }
+    @keyframes waveMove{ from{transform:translateX(0)} to{transform:translateX(-50%)} }
 
-    footer {
-      text-align: center;
-      padding: 16px;
-      color: #475569;
+    footer{
+      text-align:center;
+      padding:18px;
+      color: rgba(255,255,255,0.85);
     }
   </style>
 </head>
-
 <body>
 
-  <header>
-    <h1>💻 MİLLİ SAVUNMA ÜNİVERSİTESİ YAZILIM KULÜBÜ</h1>
-    <p>Birlikte öğren, birlikte üret!</p>
+<header>
+  <h1 style="margin:0;">💻 MİLLİ SAVUNMA ÜNİVERSİTESİ YAZILIM KULÜBÜ</h1>
+  <p style="margin:8px 0 0; opacity:.9;">Birlikte öğren, birlikte üret!</p>
+</header>
 
-    <!-- HEADER GÖRSEL -->
-    <div class="hero-img">
-      <img src="https://picsum.photos/1200/500?tech" alt="Yazılım Kulübü">
+<nav>
+  <a href="#hakkinda">Hakkında</a>
+  <a href="#etkinlik">Etkinlikler</a>
+  <a href="#oyun">Mini Oyun</a>
+  <a href="#iletisim">İletişim</a>
+</nav>
+
+<div class="card" id="hakkinda">
+  <h2>🚀 Hakkımızda</h2>
+  <p>Yazılım Kulübü; yazılım öğrenmek, proje geliştirmek ve teknoloji meraklılarını bir araya getirmek için kurulmuştur.</p>
+</div>
+
+<div class="card" id="etkinlik">
+  <h2>📅 Etkinlikler</h2>
+  <ul>
+    <li>👨‍💻 Haftalık Kodlama Buluşması</li>
+    <li>⚡ Mini Hackathon</li>
+    <li>🎓 HTML / CSS Eğitimleri</li>
+  </ul>
+</div>
+
+<div class="card" id="oyun">
+  <h2>🎮 Mini Oyun</h2>
+
+  <div class="game-wrap">
+    <div class="hud">
+      <div class="pill">Skor: <span id="score">0</span> · Rekor: <span id="best">0</span></div>
+      <div class="controls">
+        Kontrol: <b>Boşluk</b> / <b>Tıkla</b> / <b>Dokun</b> = Zıpla · <b>R</b> = Reset
+      </div>
+      <div class="btns">
+        <button id="btnStart">Başlat / Devam</button>
+        <button id="btnReset" class="ghost">Reset</button>
+      </div>
     </div>
-  </header>
 
-  <nav>
-    <a href="#hakkinda">Hakkında</a>
-    <a href="#etkinlik">Etkinlikler</a>
-    <a href="#iletisim">İletişim</a>
-  </nav>
-
-  <div class="card" id="hakkinda">
-    <img src="https://picsum.photos/800/400?code" alt="Hakkımızda">
-    <h2>🚀 Hakkımızda</h2>
-    <p>
-      Yazılım Kulübü; yazılım öğrenmek, projeler geliştirmek ve
-      teknolojiye meraklı insanları bir araya getirmek için kurulmuştur.
-    </p>
+    <canvas id="game" width="960" height="540"></canvas>
   </div>
 
-  <div class="card" id="etkinlik">
-    <img src="https://picsum.photos/800/400?programming" alt="Etkinlikler">
-    <h2>📅 Etkinlikler</h2>
-    <ul>
-      <li>👨‍💻 Haftalık Kodlama Buluşması</li>
-      <li>⚡ Mini Hackathon</li>
-      <li>🎓 HTML / CSS Eğitimleri</li>
-    </ul>
-    <button onclick="alert('Etkinliğe kaydoldun! (örnek)')">
-      Etkinliğe Katıl
-    </button>
-  </div>
+  <p style="margin:10px 0 0; opacity:.85;">
+    İpucu: Boruların arasından geç, yere/boruya çarpma. Zıplamayı “mini dokunuş” gibi düşün 🙂
+  </p>
+</div>
 
-  <div class="card" id="iletisim">
-    <img src="https://picsum.photos/800/400?contact" alt="İletişim">
-    <h2>📬 İletişim</h2>
-    <p>📧 E-posta: Sinan.bulut@ornek.com</p>
-    <p>📸 Instagram: @sinann</p>
-  </div>
+<div class="card" id="iletisim">
+  <h2>📬 İletişim</h2>
+  <p>📧 E-posta: Sinan.bulut@ornek.com</p>
+  <p>📸 Instagram: @sinann</p>
+</div>
 
-  <footer>
-    © 2026 Sinanın Web Sayfası · Tüm Hakları Saklıdır
-  </footer>
+<div class="wave-area">
+  <div class="wave wave1"></div>
+  <div class="wave wave2"></div>
+  <div class="wave wave3"></div>
+</div>
+
+<footer>© 2026 Sinanın Web Sayfası · Tüm Hakları Saklıdır</footer>
+
+<script>
+(() => {
+  const canvas = document.getElementById("game");
+  const ctx = canvas.getContext("2d");
+
+  const scoreEl = document.getElementById("score");
+  const bestEl  = document.getElementById("best");
+  const btnStart = document.getElementById("btnStart");
+  const btnReset = document.getElementById("btnReset");
+
+  // --- Oyun sabitleri ---
+  const W = canvas.width, H = canvas.height;
+
+  const GRAVITY = 0.42;
+  const FLAP    = -7.5;
+  const PIPE_W  = 78;
+  const GAP_MIN = 150;
+  const GAP_MAX = 210;
+  const PIPE_SPACING = 290;
+  const PIPE_SPEED_BASE = 3.4;
+
+  const GROUND_H = 60;
+
+  // Basit "kuş"
+  const bird = {
+    x: 200,
+    y: H * 0.5,
+    r: 16,
+    vy: 0
+  };
+
+  let pipes = [];
+  let running = false;
+  let gameOver = false;
+  let score = 0;
+  let best = Number(localStorage.getItem("flappy_best_v1") || 0);
+  bestEl.textContent = best;
+
+  // zorluk artışı
+  let speed = PIPE_SPEED_BASE;
+
+  function rand(min, max){ return Math.random() * (max - min) + min; }
+
+  function reset() {
+    bird.y = H * 0.5;
+    bird.vy = 0;
+    pipes = [];
+    score = 0;
+    speed = PIPE_SPEED_BASE;
+    gameOver = false;
+    scoreEl.textContent = "0";
+
+    // 3 boru seti oluştur
+    const startX = W + 200;
+    for (let i = 0; i < 4; i++) addPipe(startX + i * PIPE_SPACING);
+    draw(); // ilk görüntü
+  }
+
+  function addPipe(x) {
+    const gap = rand(GAP_MIN, GAP_MAX);
+    const topH = rand(70, H - GROUND_H - gap - 70);
+    pipes.push({
+      x,
+      topH,
+      gap,
+      passed: false
+    });
+  }
+
+  function flap() {
+    if (!running && !gameOver) running = true;
+    if (gameOver) return;
+    bird.vy = FLAP;
+  }
+
+  function setBestIfNeeded() {
+    if (score > best) {
+      best = score;
+      localStorage.setItem("flappy_best_v1", String(best));
+      bestEl.textContent = String(best);
+    }
+  }
+
+  function collideCircleRect(cx, cy, cr, rx, ry, rw, rh) {
+    // Circle-Rect collision
+    const closestX = Math.max(rx, Math.min(cx, rx + rw));
+    const closestY = Math.max(ry, Math.min(cy, ry + rh));
+    const dx = cx - closestX;
+    const dy = cy - closestY;
+    return (dx*dx + dy*dy) <= cr*cr;
+  }
+
+  function update() {
+    if (!running || gameOver) return;
+
+    // kuş fiziği
+    bird.vy += GRAVITY;
+    bird.y += bird.vy;
+
+    // yer / tavan çarpması
+    if (bird.y + bird.r >= H - GROUND_H) {
+      bird.y = H - GROUND_H - bird.r;
+      gameOver = true;
+      running = false;
+      setBestIfNeeded();
+      return;
+    }
+    if (bird.y - bird.r <= 0) {
+      bird.y = bird.r;
+      bird.vy = 0;
+    }
+
+    // borular
+    for (const p of pipes) {
+      p.x -= speed;
+
+      // skor: kuş boruyu geçti mi?
+      if (!p.passed && p.x + PIPE_W < bird.x) {
+        p.passed = true;
+        score++;
+        scoreEl.textContent = String(score);
+
+        // hafif hız artışı
+        speed = PIPE_SPEED_BASE + Math.min(2.2, score * 0.08);
+      }
+
+      // çarpışma: üst boru
+      const hitTop = collideCircleRect(
+        bird.x, bird.y, bird.r,
+        p.x, 0, PIPE_W, p.topH
+      );
+
+      // çarpışma: alt boru
+      const bottomY = p.topH + p.gap;
+      const bottomH = (H - GROUND_H) - bottomY;
+      const hitBottom = collideCircleRect(
+        bird.x, bird.y, bird.r,
+        p.x, bottomY, PIPE_W, bottomH
+      );
+
+      if (hitTop || hitBottom) {
+        gameOver = true;
+        running = false;
+        setBestIfNeeded();
+        return;
+      }
+    }
+
+    // en soldan çıkan boruyu sil, sağa yenisini ekle
+    if (pipes.length && pipes[0].x + PIPE_W < -50) {
+      pipes.shift();
+      const lastX = pipes[pipes.length - 1].x;
+      addPipe(lastX + PIPE_SPACING);
+    }
+  }
+
+  function drawBackground() {
+    // gökyüzü
+    ctx.clearRect(0, 0, W, H);
+
+    // basit bulut çizgileri
+    ctx.globalAlpha = 0.15;
+    ctx.fillStyle = "#ffffff";
+    for (let i=0; i<6; i++){
+      const x = (i*180 + (Date.now()*0.02)%180) % (W+220) - 120;
+      const y = 60 + i*55;
+      ctx.beginPath();
+      ctx.ellipse(x, y, 70, 22, 0, 0, Math.PI*2);
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  function drawPipes() {
+    for (const p of pipes) {
+      // borular
+      const x = p.x;
+
+      // üst
+      ctx.fillStyle = "#16a34a";
+      ctx.fillRect(x, 0, PIPE_W, p.topH);
+
+      // üst ağız
+      ctx.fillStyle = "#22c55e";
+      ctx.fillRect(x - 6, p.topH - 18, PIPE_W + 12, 18);
+
+      // alt
+      const by = p.topH + p.gap;
+      const bh = (H - GROUND_H) - by;
+      ctx.fillStyle = "#16a34a";
+      ctx.fillRect(x, by, PIPE_W, bh);
+
+      // alt ağız
+      ctx.fillStyle = "#22c55e";
+      ctx.fillRect(x - 6, by, PIPE_W + 12, 18);
+    }
+  }
+
+  function drawBird() {
+    // kuş gövde
+    ctx.save();
+    ctx.translate(bird.x, bird.y);
+
+    // hızına göre hafif eğim
+    const rot = Math.max(-0.6, Math.min(0.6, bird.vy * 0.06));
+    ctx.rotate(rot);
+
+    // gövde
+    ctx.fillStyle = "#fbbf24";
+    ctx.beginPath();
+    ctx.arc(0, 0, bird.r, 0, Math.PI*2);
+    ctx.fill();
+
+    // göz
+    ctx.fillStyle = "#111827";
+    ctx.beginPath();
+    ctx.arc(6, -5, 3.2, 0, Math.PI*2);
+    ctx.fill();
+
+    // gaga
+    ctx.fillStyle = "#f97316";
+    ctx.beginPath();
+    ctx.moveTo(bird.r - 2, 0);
+    ctx.lineTo(bird.r + 12, 4);
+    ctx.lineTo(bird.r + 12, -4);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.restore();
+  }
+
+  function drawGround() {
+    // zemin
+    ctx.fillStyle = "#0f172a";
+    ctx.fillRect(0, H - GROUND_H, W, GROUND_H);
+
+    // üst çizgi
+    ctx.fillStyle = "#334155";
+    ctx.fillRect(0, H - GROUND_H, W, 4);
+
+    // hafif hareketli çizgiler
+    const t = (Date.now()*0.08) % 40;
+    ctx.fillStyle = "rgba(148,163,184,0.35)";
+    for (let x = -40; x < W + 40; x += 40) {
+      ctx.fillRect(x + t, H - GROUND_H + 18, 20, 3);
+    }
+  }
+
+  function drawOverlay() {
+    if (!running && !gameOver) {
+      // başlangıç
+      ctx.fillStyle = "rgba(15,23,42,0.55)";
+      ctx.fillRect(0, 0, W, H);
+
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "bold 34px Arial";
+      ctx.textAlign = "center";
+      ctx.fillText("Başlamak için Zıpla!", W/2, H/2 - 20);
+
+      ctx.font = "16px Arial";
+      ctx.fillText("Boşluk / Tık / Dokun", W/2, H/2 + 16);
+      ctx.fillText("Reset: R", W/2, H/2 + 42);
+    }
+
+    if (gameOver) {
+      ctx.fillStyle = "rgba(15,23,42,0.62)";
+      ctx.fillRect(0, 0, W, H);
+
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "bold 38px Arial";
+      ctx.textAlign = "center";
+      ctx.fillText("Oyun Bitti!", W/2, H/2 - 30);
+
+      ctx.font = "18px Arial";
+      ctx.fillText(`Skor: ${score}  ·  Rekor: ${best}`, W/2, H/2 + 6);
+      ctx.fillText("R ile yeniden başlat", W/2, H/2 + 36);
+    }
+  }
+
+  function draw() {
+    drawBackground();
+    drawPipes();
+    drawBird();
+    drawGround();
+    drawOverlay();
+  }
+
+  function loop() {
+    update();
+    draw();
+    requestAnimationFrame(loop);
+  }
+
+  // --- Kontroller ---
+  window.addEventListener("keydown", (e) => {
+    if (e.code === "Space") {
+      e.preventDefault();
+      flap();
+    } else if (e.key.toLowerCase() === "r") {
+      reset();
+    }
+  });
+
+  canvas.addEventListener("mousedown", flap);
+  canvas.addEventListener("touchstart", (e) => { e.preventDefault(); flap(); }, { passive:false });
+
+  btnStart.addEventListener("click", () => {
+    if (gameOver) return;   // oyun bitti ise R ile reset
+    running = true;
+    flap(); // küçük bir başlangıç zıplaması
+  });
+
+  btnReset.addEventListener("click", reset);
+
+  // Başlangıç
+  reset();
+  loop();
+})();
+</script>
 
 </body>
 </html>
