@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Yazılım Kulübü</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(120deg, #e0f2fe, #fdf4ff);
+    }
+
+    header {
+      background: linear-gradient(90deg, #2563eb, #7c3aed);
+      color: white;
+      text-align: center;
+      padding: 30px 15px;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 32px;
+    }
+
+    header p {
+      margin-top: 8px;
+      font-size: 16px;
+      opacity: 0.9;
+    }
+
+    nav {
+      background: #1e293b;
+      text-align: center;
+      padding: 12px;
+    }
+
+    nav a {
+      color: white;
+      margin: 0 12px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    nav a:hover {
+      color: #93c5fd;
+    }
+
+    .card {
+      max-width: 800px;
+      margin: 25px auto;
+      background: white;
+      padding: 20px;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+
+    .card h2 {
+      color: #4f46e5;
+      margin-top: 0;
+    }
+
+    ul {
+      padding-left: 20px;
+    }
+
+    ul li {
+      margin-bottom: 8px;
+    }
+
+    button {
+      background: linear-gradient(90deg, #22c55e, #16a34a);
+      color: white;
+      border: none;
+      padding: 12px 18px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 15px;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+    }
+
+    footer {
+      text-align: center;
+      padding: 16px;
+      color: #475569;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>💻 MİLLİ SAVUNMA ÜNİVERSİTESİ YAZILIM KULÜBÜ</h1>
+    <p>Birlikte öğren, birlikte üret!</p>
+  </header>
+
+  <nav>
+    <a href="#hakkinda">Hakkında</a>
+    <a href="#etkinlik">Etkinlikler</a>
+    <a href="#iletisim">İletişim</a>
+  </nav>
+
+  <div class="card" id="hakkinda">
+    <h2>🚀 Hakkımızda</h2>
+    <p>
+      Yazılım Kulübü; yazılım öğrenmek, projeler geliştirmek ve
+      teknolojiye meraklı insanları bir araya getirmek için kurulmuştur.
+    </p>
+  </div>
+
+  <div class="card" id="etkinlik">
+    <h2>📅 Etkinlikler</h2>
+    <ul>
+      <li>👨‍💻 Haftalık Kodlama Buluşması</li>
+      <li>⚡ Mini Hackathon</li>
+      <li>🎓 HTML / CSS Eğitimleri</li>
+    </ul>
+    <button onclick="alert('Etkinliğe kaydoldun! (örnek)')">
+      Etkinliğe Katıl
+    </button>
+  </div>
+
+  <div class="card" id="iletisim">
+    <h2>📬 İletişim</h2>
+    <p>📧 E-posta: Sinan.bulut@ornek.com</p>
+    <p>📸 Instagram: @sinann</p>
+  </div>
+
+  <footer>
+    © 2026 Sinanın Web Sayfası · Tüm Hakları Saklıdır
+  </footer>
+
+</body>
+</html>
