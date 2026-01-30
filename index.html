@@ -16,7 +16,7 @@
       background: linear-gradient(90deg, #2563eb, #7c3aed);
       color: white;
       text-align: center;
-      padding: 30px 15px;
+      padding: 30px 15px 15px;
     }
 
     header h1 {
@@ -28,6 +28,22 @@
       margin-top: 8px;
       font-size: 16px;
       opacity: 0.9;
+    }
+
+    /* HEADER GÖRSELİ */
+    .hero-img {
+      max-width: 900px;
+      margin: 20px auto 0;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+    }
+
+    .hero-img img {
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+      display: block;
     }
 
     nav {
@@ -54,6 +70,15 @@
       padding: 20px;
       border-radius: 16px;
       box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+
+    /* KART İÇİ GÖRSEL */
+    .card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 14px;
+      margin-bottom: 12px;
     }
 
     .card h2 {
@@ -96,6 +121,11 @@
   <header>
     <h1>💻 MİLLİ SAVUNMA ÜNİVERSİTESİ YAZILIM KULÜBÜ</h1>
     <p>Birlikte öğren, birlikte üret!</p>
+
+    <!-- HEADER GÖRSEL -->
+    <div class="hero-img">
+      <img src="https://picsum.photos/1200/500?tech" alt="Yazılım Kulübü">
+    </div>
   </header>
 
   <nav>
@@ -105,6 +135,7 @@
   </nav>
 
   <div class="card" id="hakkinda">
+    <img src="https://picsum.photos/800/400?code" alt="Hakkımızda">
     <h2>🚀 Hakkımızda</h2>
     <p>
       Yazılım Kulübü; yazılım öğrenmek, projeler geliştirmek ve
@@ -113,6 +144,7 @@
   </div>
 
   <div class="card" id="etkinlik">
+    <img src="https://picsum.photos/800/400?programming" alt="Etkinlikler">
     <h2>📅 Etkinlikler</h2>
     <ul>
       <li>👨‍💻 Haftalık Kodlama Buluşması</li>
@@ -125,6 +157,7 @@
   </div>
 
   <div class="card" id="iletisim">
+    <img src="https://picsum.photos/800/400?contact" alt="İletişim">
     <h2>📬 İletişim</h2>
     <p>📧 E-posta: Sinan.bulut@ornek.com</p>
     <p>📸 Instagram: @sinann</p>
