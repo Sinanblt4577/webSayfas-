@@ -3,26 +3,19 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>MSÜ Yazılım Kulübü - Site + Oyunlar</title>
-
+  <title>Yazılım Kulübü + Mini Flappy Oyun</title>
   <style>
-    /* ================== GENEL ================== */
     body{
       margin:0;
       font-family: Arial, sans-serif;
       background:#0b1220;
       color:#fff;
-      overflow-x:hidden;
     }
-
     header{
       background: linear-gradient(90deg,#2563eb,#7c3aed);
       text-align:center;
       padding:28px 14px;
     }
-    header h1{ margin:0; font-size: 28px; }
-    header p{ margin:8px 0 0; opacity:.9; }
-
     nav{
       background: rgba(30,41,59,0.9);
       text-align:center;
@@ -32,12 +25,7 @@
       z-index: 10;
       backdrop-filter: blur(8px);
     }
-    nav a{
-      color:#fff;
-      text-decoration:none;
-      margin:0 12px;
-      font-weight:bold;
-    }
+    nav a{ color:#fff; text-decoration:none; margin:0 12px; font-weight:bold; }
     nav a:hover{ color:#93c5fd; }
 
     .card{
@@ -51,10 +39,13 @@
     }
     .card h2{ margin-top:0; color:#4f46e5; }
 
-    ul{ padding-left: 20px; }
-    ul li{ margin-bottom: 8px; }
-
-    /* ================== BUTONLAR / HUD ================== */
+    /* Oyun alanı */
+    .game-wrap{
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      align-items: start;
+    }
     .hud{
       display:flex;
       gap:12px;
@@ -75,7 +66,16 @@
     .controls{
       font-size: 14px;
       opacity: 0.9;
-      font-weight: normal;
+    }
+    canvas{
+      width: 100%;
+      max-width: 900px;
+      aspect-ratio: 16 / 9;
+      background: linear-gradient(180deg, #0ea5e9, #1e293b);
+      border-radius: 16px;
+      display:block;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+      touch-action: manipulation; /* mobilde çift tıklama zoom’u azaltır */
     }
     .btns{
       display:flex;
@@ -90,64 +90,14 @@
       font-weight:bold;
       background: linear-gradient(90deg,#22c55e,#16a34a);
       color:#fff;
-      transition: transform .15s, opacity .15s;
+      transition: transform .15s;
     }
     button:hover{ transform: scale(1.04); }
     .ghost{
       background: linear-gradient(90deg,#64748b,#475569);
     }
 
-    /* ================== OYUN 1: FLAPPY ================== */
-    .game-wrap{
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 12px;
-      align-items: start;
-    }
-    canvas{
-      width: 100%;
-      max-width: 900px;
-      aspect-ratio: 16 / 9;
-      background: linear-gradient(180deg, #0ea5e9, #1e293b);
-      border-radius: 16px;
-      display:block;
-      box-shadow: 0 12px 30px rgba(0,0,0,0.35);
-      touch-action: manipulation;
-    }
-
-    /* ================== OYUN 2: SLOT ================== */
-    .slotRow{
-      display:flex;
-      justify-content:center;
-      gap:14px;
-      margin: 10px 0 14px;
-      flex-wrap:wrap;
-    }
-    .slotBox{
-      width: 90px;
-      height: 90px;
-      border-radius: 18px;
-      background: #111827;
-      color: #fff;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-size: 44px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.25);
-      user-select:none;
-    }
-    .slotShake{
-      animation: slotShake 0.35s ease-in-out infinite;
-    }
-    @keyframes slotShake{
-      0%{ transform: translateY(0) rotate(0deg); }
-      25%{ transform: translateY(-3px) rotate(-2deg); }
-      50%{ transform: translateY(0) rotate(2deg); }
-      75%{ transform: translateY(3px) rotate(-1deg); }
-      100%{ transform: translateY(0) rotate(0deg); }
-    }
-
-    /* ================== DALGA ================== */
+    /* DALGA */
     .wave-area{
       position: relative;
       width:100%;
@@ -191,19 +141,17 @@
     }
   </style>
 </head>
-
 <body>
 
 <header>
-  <h1>💻 MİLLİ SAVUNMA ÜNİVERSİTESİ YAZILIM KULÜBÜ</h1>
-  <p>Birlikte öğren, birlikte üret!</p>
+  <h1 style="margin:0;">💻 MİLLİ SAVUNMA ÜNİVERSİTESİ YAZILIM KULÜBÜ</h1>
+  <p style="margin:8px 0 0; opacity:.9;">Birlikte öğren, birlikte üret!</p>
 </header>
 
 <nav>
   <a href="#hakkinda">Hakkında</a>
   <a href="#etkinlik">Etkinlikler</a>
-  <a href="#oyun">Flappy</a>
-  <a href="#slot">Slot</a>
+  <a href="#oyun">Mini Oyun</a>
   <a href="#iletisim">İletişim</a>
 </nav>
 
@@ -221,9 +169,8 @@
   </ul>
 </div>
 
-<!-- ================== OYUN 1 ================== -->
 <div class="card" id="oyun">
-  <h2>🎮 Mini Oyun 1: Flappy Tarzı</h2>
+  <h2>🎮 Mini Oyun: Flappy</h2>
 
   <div class="game-wrap">
     <div class="hud">
@@ -241,32 +188,7 @@
   </div>
 
   <p style="margin:10px 0 0; opacity:.85;">
-    İpucu: Boruların arasından geç, yere/boruya çarpma.
-  </p>
-</div>
-
-<!-- ================== OYUN 2 ================== -->
-<div class="card" id="slot">
-  <h2>🎰 Mini Oyun 2: Slot (Eğlence Amaçlı)</h2>
-
-  <div class="hud" style="margin-bottom:10px;">
-    <div class="pill">Jeton: <span id="coins">20</span></div>
-    <div class="pill">Kazanç: <span id="wins">0</span></div>
-    <div class="controls">“Çevir” → 3 aynı gelirse +5 jeton, 2 aynı gelirse +1 jeton.</div>
-    <div class="btns">
-      <button id="spinBtn">Çevir (1 jeton)</button>
-      <button id="resetSlotBtn" class="ghost">Sıfırla</button>
-    </div>
-  </div>
-
-  <div class="slotRow">
-    <div class="slotBox" id="s1">🍒</div>
-    <div class="slotBox" id="s2">🍋</div>
-    <div class="slotBox" id="s3">🍇</div>
-  </div>
-
-  <p id="slotMsg" style="text-align:center; margin:12px 0 0; opacity:.85;">
-    Başlamak için “Çevir”e bas.
+    İpucu: Boruların arasından geç, yere/boruya çarpma. Zıplamayı “mini dokunuş” gibi düşün 🙂
   </p>
 </div>
 
@@ -276,7 +198,6 @@
   <p>📸 Instagram: @sinann</p>
 </div>
 
-<!-- 🌊 DALGA -->
 <div class="wave-area">
   <div class="wave wave1"></div>
   <div class="wave wave2"></div>
@@ -286,9 +207,6 @@
 <footer>© 2026 Sinanın Web Sayfası · Tüm Hakları Saklıdır</footer>
 
 <script>
-/* =========================================================
-   OYUN 1: FLAPPY (Canvas)
-========================================================= */
 (() => {
   const canvas = document.getElementById("game");
   const ctx = canvas.getContext("2d");
@@ -298,6 +216,7 @@
   const btnStart = document.getElementById("btnStart");
   const btnReset = document.getElementById("btnReset");
 
+  // --- Oyun sabitleri ---
   const W = canvas.width, H = canvas.height;
 
   const GRAVITY = 0.42;
@@ -307,9 +226,16 @@
   const GAP_MAX = 210;
   const PIPE_SPACING = 290;
   const PIPE_SPEED_BASE = 3.4;
+
   const GROUND_H = 60;
 
-  const bird = { x: 200, y: H*0.5, r: 16, vy: 0 };
+  // Basit "kuş"
+  const bird = {
+    x: 200,
+    y: H * 0.5,
+    r: 16,
+    vy: 0
+  };
 
   let pipes = [];
   let running = false;
@@ -318,12 +244,13 @@
   let best = Number(localStorage.getItem("flappy_best_v1") || 0);
   bestEl.textContent = best;
 
+  // zorluk artışı
   let speed = PIPE_SPEED_BASE;
 
   function rand(min, max){ return Math.random() * (max - min) + min; }
 
   function reset() {
-    bird.y = H*0.5;
+    bird.y = H * 0.5;
     bird.vy = 0;
     pipes = [];
     score = 0;
@@ -331,15 +258,21 @@
     gameOver = false;
     scoreEl.textContent = "0";
 
+    // 3 boru seti oluştur
     const startX = W + 200;
-    for (let i=0; i<4; i++) addPipe(startX + i*PIPE_SPACING);
-    draw();
+    for (let i = 0; i < 4; i++) addPipe(startX + i * PIPE_SPACING);
+    draw(); // ilk görüntü
   }
 
   function addPipe(x) {
     const gap = rand(GAP_MIN, GAP_MAX);
     const topH = rand(70, H - GROUND_H - gap - 70);
-    pipes.push({ x, topH, gap, passed:false });
+    pipes.push({
+      x,
+      topH,
+      gap,
+      passed: false
+    });
   }
 
   function flap() {
@@ -357,6 +290,7 @@
   }
 
   function collideCircleRect(cx, cy, cr, rx, ry, rw, rh) {
+    // Circle-Rect collision
     const closestX = Math.max(rx, Math.min(cx, rx + rw));
     const closestY = Math.max(ry, Math.min(cy, ry + rh));
     const dx = cx - closestX;
@@ -367,9 +301,11 @@
   function update() {
     if (!running || gameOver) return;
 
+    // kuş fiziği
     bird.vy += GRAVITY;
     bird.y += bird.vy;
 
+    // yer / tavan çarpması
     if (bird.y + bird.r >= H - GROUND_H) {
       bird.y = H - GROUND_H - bird.r;
       gameOver = true;
@@ -382,20 +318,33 @@
       bird.vy = 0;
     }
 
+    // borular
     for (const p of pipes) {
       p.x -= speed;
 
+      // skor: kuş boruyu geçti mi?
       if (!p.passed && p.x + PIPE_W < bird.x) {
         p.passed = true;
         score++;
         scoreEl.textContent = String(score);
+
+        // hafif hız artışı
         speed = PIPE_SPEED_BASE + Math.min(2.2, score * 0.08);
       }
 
-      const hitTop = collideCircleRect(bird.x,bird.y,bird.r, p.x,0, PIPE_W,p.topH);
+      // çarpışma: üst boru
+      const hitTop = collideCircleRect(
+        bird.x, bird.y, bird.r,
+        p.x, 0, PIPE_W, p.topH
+      );
+
+      // çarpışma: alt boru
       const bottomY = p.topH + p.gap;
       const bottomH = (H - GROUND_H) - bottomY;
-      const hitBottom = collideCircleRect(bird.x,bird.y,bird.r, p.x,bottomY, PIPE_W,bottomH);
+      const hitBottom = collideCircleRect(
+        bird.x, bird.y, bird.r,
+        p.x, bottomY, PIPE_W, bottomH
+      );
 
       if (hitTop || hitBottom) {
         gameOver = true;
@@ -405,6 +354,7 @@
       }
     }
 
+    // en soldan çıkan boruyu sil, sağa yenisini ekle
     if (pipes.length && pipes[0].x + PIPE_W < -50) {
       pipes.shift();
       const lastX = pipes[pipes.length - 1].x;
@@ -413,8 +363,10 @@
   }
 
   function drawBackground() {
-    ctx.clearRect(0,0,W,H);
+    // gökyüzü
+    ctx.clearRect(0, 0, W, H);
 
+    // basit bulut çizgileri
     ctx.globalAlpha = 0.15;
     ctx.fillStyle = "#ffffff";
     for (let i=0; i<6; i++){
@@ -429,40 +381,51 @@
 
   function drawPipes() {
     for (const p of pipes) {
+      // borular
       const x = p.x;
 
+      // üst
       ctx.fillStyle = "#16a34a";
       ctx.fillRect(x, 0, PIPE_W, p.topH);
 
+      // üst ağız
       ctx.fillStyle = "#22c55e";
       ctx.fillRect(x - 6, p.topH - 18, PIPE_W + 12, 18);
 
+      // alt
       const by = p.topH + p.gap;
       const bh = (H - GROUND_H) - by;
       ctx.fillStyle = "#16a34a";
       ctx.fillRect(x, by, PIPE_W, bh);
 
+      // alt ağız
       ctx.fillStyle = "#22c55e";
       ctx.fillRect(x - 6, by, PIPE_W + 12, 18);
     }
   }
 
   function drawBird() {
+    // kuş gövde
     ctx.save();
     ctx.translate(bird.x, bird.y);
+
+    // hızına göre hafif eğim
     const rot = Math.max(-0.6, Math.min(0.6, bird.vy * 0.06));
     ctx.rotate(rot);
 
+    // gövde
     ctx.fillStyle = "#fbbf24";
     ctx.beginPath();
-    ctx.arc(0,0,bird.r,0,Math.PI*2);
+    ctx.arc(0, 0, bird.r, 0, Math.PI*2);
     ctx.fill();
 
+    // göz
     ctx.fillStyle = "#111827";
     ctx.beginPath();
-    ctx.arc(6,-5,3.2,0,Math.PI*2);
+    ctx.arc(6, -5, 3.2, 0, Math.PI*2);
     ctx.fill();
 
+    // gaga
     ctx.fillStyle = "#f97316";
     ctx.beginPath();
     ctx.moveTo(bird.r - 2, 0);
@@ -475,36 +438,47 @@
   }
 
   function drawGround() {
+    // zemin
     ctx.fillStyle = "#0f172a";
     ctx.fillRect(0, H - GROUND_H, W, GROUND_H);
 
+    // üst çizgi
     ctx.fillStyle = "#334155";
     ctx.fillRect(0, H - GROUND_H, W, 4);
 
+    // hafif hareketli çizgiler
     const t = (Date.now()*0.08) % 40;
     ctx.fillStyle = "rgba(148,163,184,0.35)";
-    for (let x=-40; x<W+40; x+=40) ctx.fillRect(x+t, H-GROUND_H+18, 20, 3);
+    for (let x = -40; x < W + 40; x += 40) {
+      ctx.fillRect(x + t, H - GROUND_H + 18, 20, 3);
+    }
   }
 
   function drawOverlay() {
     if (!running && !gameOver) {
+      // başlangıç
       ctx.fillStyle = "rgba(15,23,42,0.55)";
-      ctx.fillRect(0,0,W,H);
+      ctx.fillRect(0, 0, W, H);
+
       ctx.fillStyle = "#ffffff";
       ctx.font = "bold 34px Arial";
       ctx.textAlign = "center";
       ctx.fillText("Başlamak için Zıpla!", W/2, H/2 - 20);
+
       ctx.font = "16px Arial";
       ctx.fillText("Boşluk / Tık / Dokun", W/2, H/2 + 16);
       ctx.fillText("Reset: R", W/2, H/2 + 42);
     }
+
     if (gameOver) {
       ctx.fillStyle = "rgba(15,23,42,0.62)";
-      ctx.fillRect(0,0,W,H);
+      ctx.fillRect(0, 0, W, H);
+
       ctx.fillStyle = "#ffffff";
       ctx.font = "bold 38px Arial";
       ctx.textAlign = "center";
       ctx.fillText("Oyun Bitti!", W/2, H/2 - 30);
+
       ctx.font = "18px Arial";
       ctx.fillText(`Skor: ${score}  ·  Rekor: ${best}`, W/2, H/2 + 6);
       ctx.fillText("R ile yeniden başlat", W/2, H/2 + 36);
@@ -525,124 +499,30 @@
     requestAnimationFrame(loop);
   }
 
+  // --- Kontroller ---
   window.addEventListener("keydown", (e) => {
-    if (e.code === "Space") { e.preventDefault(); flap(); }
-    else if (e.key.toLowerCase() === "r") reset();
+    if (e.code === "Space") {
+      e.preventDefault();
+      flap();
+    } else if (e.key.toLowerCase() === "r") {
+      reset();
+    }
   });
 
   canvas.addEventListener("mousedown", flap);
   canvas.addEventListener("touchstart", (e) => { e.preventDefault(); flap(); }, { passive:false });
 
   btnStart.addEventListener("click", () => {
-    if (gameOver) return;
+    if (gameOver) return;   // oyun bitti ise R ile reset
     running = true;
-    flap();
+    flap(); // küçük bir başlangıç zıplaması
   });
+
   btnReset.addEventListener("click", reset);
 
+  // Başlangıç
   reset();
   loop();
-})();
-
-/* =========================================================
-   OYUN 2: SLOT (Eğlence amaçlı - jeton/puan)
-========================================================= */
-(() => {
-  const symbols = ["🍒","🍋","🍇","🔔","⭐","7️⃣"];
-
-  const s1 = document.getElementById("s1");
-  const s2 = document.getElementById("s2");
-  const s3 = document.getElementById("s3");
-
-  const coinsEl = document.getElementById("coins");
-  const winsEl  = document.getElementById("wins");
-  const msgEl   = document.getElementById("slotMsg");
-
-  const spinBtn = document.getElementById("spinBtn");
-  const resetBtn= document.getElementById("resetSlotBtn");
-
-  let coins = 20;
-  let wins = 0;
-  let spinning = false;
-
-  function randSymbol(){
-    return symbols[Math.floor(Math.random()*symbols.length)];
-  }
-
-  function setUI(){
-    coinsEl.textContent = coins;
-    winsEl.textContent = wins;
-    spinBtn.disabled = spinning || coins <= 0;
-    spinBtn.style.opacity = spinBtn.disabled ? "0.6" : "1";
-  }
-
-  function shake(on){
-    [s1,s2,s3].forEach(el => el.classList.toggle("slotShake", on));
-  }
-
-  function spin(){
-    if (spinning) return;
-    if (coins <= 0){
-      msgEl.textContent = "Jeton bitti. Sıfırla ile tekrar başla.";
-      return;
-    }
-
-    coins -= 1;
-    spinning = true;
-    msgEl.textContent = "Çeviriliyor...";
-    setUI();
-    shake(true);
-
-    let t = 0;
-    const timer = setInterval(() => {
-      s1.textContent = randSymbol();
-      s2.textContent = randSymbol();
-      s3.textContent = randSymbol();
-      t++;
-      if (t >= 12){
-        clearInterval(timer);
-        shake(false);
-        spinning = false;
-
-        const a = randSymbol();
-        const b = randSymbol();
-        const c = randSymbol();
-        s1.textContent = a;
-        s2.textContent = b;
-        s3.textContent = c;
-
-        if (a === b && b === c){
-          coins += 5;
-          wins += 1;
-          msgEl.textContent = "🎉 3 aynı! +5 jeton kazandın.";
-        } else if (a === b || b === c || a === c){
-          coins += 1;
-          msgEl.textContent = "✨ 2 aynı! +1 jeton.";
-        } else {
-          msgEl.textContent = "😅 Olmadı, tekrar dene.";
-        }
-
-        setUI();
-      }
-    }, 60);
-  }
-
-  function resetSlot(){
-    coins = 20;
-    wins = 0;
-    s1.textContent = "🍒";
-    s2.textContent = "🍋";
-    s3.textContent = "🍇";
-    msgEl.textContent = "Başlamak için “Çevir”e bas.";
-    spinning = false;
-    shake(false);
-    setUI();
-  }
-
-  spinBtn.addEventListener("click", spin);
-  resetBtn.addEventListener("click", resetSlot);
-
-  resetSlot();
 })();
 </script>
 
